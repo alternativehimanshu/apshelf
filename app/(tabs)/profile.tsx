@@ -15,16 +15,17 @@ const hapticOptions: TrayCardItem<Haptic>[] = [
   { title: '4', value: 4 },
 ]
 
+const fontFamilies: TrayCardItem<FontFamily>[] = [
+  { title: 'Geist', value: 'geist' },
+  { title: 'Inter', value: 'inter' },
+  { title: 'Roboto Mono', value: 'roboto-mono' },
+  { title: 'JetBrains Mono', value: 'jetbrains-mono' },
+  { title: 'Montserrat', value: 'montserrat' },
+]
+
 export default function ProfileScreen() {
   const { fontFamily: fontFamilyStore, setFontFamily } = useAppStore()
   const { haptic: hapticStore, setHaptic } = useAppStore()
-  const fontFamilies: TrayCardItem<FontFamily>[] = [
-    { title: 'Geist', value: 'geist' },
-    { title: 'Inter', value: 'inter' },
-    { title: 'Roboto Mono', value: 'roboto-mono' },
-    { title: 'JetBrains Mono', value: 'jetbrains-mono' },
-    { title: 'Montserrat', value: 'montserrat' },
-  ]
   const { colors, setThemeSystem, setThemeUser, theme, preferrence } =
     themeStore()
   const { top } = useSafeAreaInsets()
