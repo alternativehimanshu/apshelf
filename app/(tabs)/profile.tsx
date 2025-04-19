@@ -54,60 +54,7 @@ export default function ProfileScreen() {
         </Text>
         {/* <ProfileContainer /> */}
         {/* Theme */}
-        <TrayCard
-          title="Theme"
-          description="Change the theme of the app"
-          icon="palette"
-          items={[
-            { title: 'Light', value: 'light' },
-            { title: 'Dark', value: 'dark' },
-            { title: 'System', value: 'system' },
-          ]}
-          onPress={(item) => {
-            logger.log(`setting theme`, item)
-            if (item === 'system') {
-              setThemeSystem(item.toLowerCase() as 'light' | 'dark' | 'system')
-            } else {
-              setThemeUser(item.toLowerCase() as 'light' | 'dark')
-            }
-          }}
-          selected={
-            preferrence === 'system'
-              ? 'system'
-              : preferrence === 'user'
-              ? theme === 'dark'
-                ? 'dark'
-                : 'light'
-              : 'system'
-          }
-        />
-        <TrayCard
-          title="Theme"
-          description="Change the theme of the app"
-          icon="palette"
-          items={[
-            { title: 'Light', value: 'light' },
-            { title: 'Dark', value: 'dark' },
-            { title: 'System', value: 'system' },
-          ]}
-          onPress={(item) => {
-            logger.log(`setting theme`, item)
-            if (item === 'system') {
-              setThemeSystem(item.toLowerCase() as 'light' | 'dark' | 'system')
-            } else {
-              setThemeUser(item.toLowerCase() as 'light' | 'dark')
-            }
-          }}
-          selected={
-            preferrence === 'system'
-              ? 'system'
-              : preferrence === 'user'
-              ? theme === 'dark'
-                ? 'dark'
-                : 'light'
-              : 'system'
-          }
-        />
+
         <TrayCard
           title="Theme"
           description="Change the theme of the app"
