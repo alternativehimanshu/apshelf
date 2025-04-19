@@ -53,7 +53,7 @@ export default function ProfileScreen() {
         >
           Profile
         </Text>
-        {/* <ProfileContainer /> */}
+        <ProfileContainer />
         {/* Theme */}
 
         <TrayCard

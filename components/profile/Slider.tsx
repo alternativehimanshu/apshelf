@@ -95,7 +95,7 @@ const SliderCard = ({ progress, onProgressChange }: SliderCardProps) => {
         height: 40,
         borderRadius: 50,
         marginVertical: 8,
-        overflow: 'hidden',
+        // overflow: 'hidden',
       }}
     >
       {/* Background track */}
@@ -134,8 +134,8 @@ const SliderCard = ({ progress, onProgressChange }: SliderCardProps) => {
               backgroundColor:
                 progress >= index * 25 ? colors.primary : colors.textSecondary,
               zIndex: 2,
-              borderWidth: 1,
-              borderColor: colors.textSecondary,
+              // borderWidth: 1,
+              // borderColor: colors.textSecondary,
             }}
           />
         ))}
@@ -149,9 +149,13 @@ const SliderCard = ({ progress, onProgressChange }: SliderCardProps) => {
               zIndex: 10,
               backgroundColor: colors.primary,
               borderRadius: 50,
-              height: 40,
+              borderWidth: 1,
+              marginTop: -2,
+              borderStyle: 'dashed',
+              borderColor: colors.textSecondary,
+              height: 44,
               position: 'absolute',
-              width: 40,
+              width: 44,
             },
             indicateStyle,
           ]}

@@ -25,7 +25,7 @@ const useAppStore = create<AppStore>()(
     }),
         {
             name: 'app-storage', // name of the item in the storage (must be unique)
-            // storage: createJSONStorage(() => storage), // (optional) by default, 'localStorage' is used
+            storage: createJSONStorage(() => storage), // (optional) by default, 'localStorage' is used
         },
     )
 )
