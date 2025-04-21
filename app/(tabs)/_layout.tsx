@@ -1,28 +1,28 @@
-import { router, Tabs } from 'expo-router'
-import { MaterialIcons } from '@expo/vector-icons'
+import { Route, router, Tabs } from 'expo-router'
+import { MaterialIcons, Octicons } from '@expo/vector-icons'
 import { Dimensions, Pressable, Vibration, View } from 'react-native'
 import { themeStore } from '@/store/theme'
 import { useRouter } from 'expo-router'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import Animated, {
+  Easing,
   useAnimatedStyle,
   useSharedValue,
+  withSequence,
   withSpring,
+  withTiming,
 } from 'react-native-reanimated'
-import { useLayoutEffect } from 'react'
+import { useLayoutEffect, useEffect } from 'react'
 import * as Haptic from 'expo-haptics'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { haptics } from '@/lib/haptics'
+import { useAtomValue } from 'jotai'
+import { hideTabsAtom } from '@/store/atoms'
 
 const TabBar = (props: BottomTabBarProps) => {
   const { state, descriptors, navigation } = props
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        gap: 8,
-      }}
-    >
+    <View style={{}}>
       <TabItem
         href="/"
         index={0}
@@ -52,22 +52,51 @@ const TabItem = ({
   index,
 }: {
   icon: string
-  href: string
+  href: Route
   isActive: boolean
   index: number
 }) => {
   const router = useRouter()
   const { colors } = themeStore()
+  const translateY = useSharedValue(-100)
+  const rotate = useSharedValue(0)
 
-  const translateY = useSharedValue(-10)
+  const hideTabs = useAtomValue(hideTabsAtom)
 
-  useLayoutEffect(() => {
-    translateY.value = withSpring(0, { duration: 700 })
+  useEffect(() => {
+    translateY.value = withTiming(hideTabs ? -140 : 0, {
+      duration: 200,
+      easing: Easing.bezier(0.25, 0.1, 0.25, 1.0),
+    })
+  }, [hideTabs])
+
+  useEffect(() => {
+    translateY.value = withSpring(0, {
+      // duration: 1500,
+      damping: 80,
+      stiffness: 100,
+    })
   }, [])
+
+  useEffect(() => {
+    if (isActive) {
+      rotate.value = withSequence(
+        withTiming(0, { duration: 20 }),
+        withTiming(20, { duration: 30 }),
+        withTiming(-20, { duration: 30 }),
+        withTiming(20, { duration: 30 }),
+        withTiming(-20, { duration: 30 }),
+        withTiming(0, { duration: 100 })
+      )
+    }
+  }, [isActive])
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      transform: [{ translateY: -translateY.value * (index + 3) * 5 }],
+      transform: [
+        { translateY: -translateY.value * (index + 1) },
+        { rotate: `${rotate.value}deg` },
+      ],
     }
   })
 
@@ -101,7 +130,7 @@ const TabItem = ({
         }}
         onPress={() => {
           router.push(href)
-          haptics.light()
+          haptics.medium()
         }}
       >
         <MaterialIcons
@@ -134,10 +163,10 @@ export default function TabsLayout() {
         }}
       >
         <Tabs.Screen
-          name="index"
+          name="(home)/index"
           options={{
             title: 'Home',
-            tabBarIcon: ({ color, size }) => (
+            tabBarIcon: ({ color, size }: { color: string; size: number }) => (
               <MaterialIcons
                 name="home"
                 color={color}
@@ -150,7 +179,7 @@ export default function TabsLayout() {
           name="explore"
           options={{
             title: 'Explore',
-            tabBarIcon: ({ color, size }) => (
+            tabBarIcon: ({ color, size }: { color: string; size: number }) => (
               <MaterialIcons
                 name="explore"
                 color={color}
@@ -163,7 +192,7 @@ export default function TabsLayout() {
           name="profile"
           options={{
             title: 'Profile',
-            tabBarIcon: ({ color, size }) => (
+            tabBarIcon: ({ color, size }: { color: string; size: number }) => (
               <MaterialIcons
                 name="person"
                 color={color}

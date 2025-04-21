@@ -11,10 +11,12 @@ import Animated, {
   Easing,
   useDerivedValue,
 } from 'react-native-reanimated'
-import { useEffect } from 'react'
-import { Link } from 'expo-router'
 
-export default function AnimatedOnboardButton() {
+export default function AnimatedOnboardButton({
+  onPress,
+}: {
+  onPress: () => void
+}) {
   const { colors } = themeStore()
 
   const progress = useDerivedValue(() => {
@@ -49,29 +51,25 @@ export default function AnimatedOnboardButton() {
         { zIndex: 100, position: 'absolute', bottom: 50, right: 50 },
       ]}
     >
-      <Link
-        href="/(tabs)"
-        asChild
+      <Pressable
+        onPress={onPress}
+        style={{
+          height: 100,
+          width: 100,
+          zIndex: 100,
+          backgroundColor: colors.primary,
+          borderRadius: 100,
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingHorizontal: 20,
+        }}
       >
-        <Pressable
-          style={{
-            height: 100,
-            width: 100,
-            zIndex: 100,
-            backgroundColor: colors.primary,
-            borderRadius: 100,
-            alignItems: 'center',
-            justifyContent: 'center',
-            paddingHorizontal: 20,
-          }}
-        >
-          <MaterialIcons
-            name="arrow-forward-ios"
-            size={24}
-            color={colors.text}
-          />
-        </Pressable>
-      </Link>
+        <MaterialIcons
+          name="arrow-forward-ios"
+          size={24}
+          color={colors.text}
+        />
+      </Pressable>
     </Animated.View>
   )
 }

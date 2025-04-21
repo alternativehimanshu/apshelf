@@ -44,10 +44,6 @@ export const useAppFont = () => {
         MontserratThin: require('../assets/fonts/montserrat/Montserrat-Thin.ttf'),
     })
 
-    if (!fontsLoaded) {
-        return null
-    }
-
     return {
         fontsLoaded,
     }

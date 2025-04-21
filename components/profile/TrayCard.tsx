@@ -1,21 +1,15 @@
-import { Pressable, Vibration, View } from 'react-native'
+import { Pressable, View } from 'react-native'
 import { Text } from '../ui/Text'
 import { themeStore } from '@/store/theme'
 import { MaterialIcons } from '@expo/vector-icons'
-import * as Haptics from 'expo-haptics'
 
 import Animated, {
-  Easing,
   LinearTransition,
   useAnimatedStyle,
-  useDerivedValue,
   useSharedValue,
-  withTiming,
 } from 'react-native-reanimated'
-import { useEffect, useState } from 'react'
-import { logger } from '@/config/logger'
+import { useState } from 'react'
 import { haptics } from '@/lib/haptics'
-import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import SliderCard from './Slider'
 
 export type TrayCardItem<T> = {
@@ -164,7 +158,7 @@ export default function TrayCard<T>({
       </View>
 
       <Animated.View
-        layout={LinearTransition.springify().damping(26).stiffness(300)}
+        layout={LinearTransition.springify().damping(36).stiffness(900)}
         style={[
           {
             overflow: 'hidden',

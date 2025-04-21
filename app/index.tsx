@@ -2,19 +2,25 @@ import { View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { themeStore } from '@/store/theme'
 import { Text } from '@/components/ui/Text'
-import { useAtom } from 'jotai'
 import ImmersiveOverlay from '@/components/ImmersiveOverlay'
-import { displayImmersiveOverlay as displayImmersiveOverlayAtom } from '@/store/atoms'
-import { useEffect } from 'react'
 import AnimatedOnboardButton from '@/components/ui/AnimatedOnboardButton'
+import useAppStore from '@/store/app'
+import { Redirect, router } from 'expo-router'
+
 export default function OnboardingScreen() {
   const { colors } = themeStore()
-  const [displayImmersiveOverlay, setDisplayImmersiveOverlay] = useAtom(
-    displayImmersiveOverlayAtom
-  )
-  useEffect(() => {
-    setDisplayImmersiveOverlay(true)
-  }, [])
+  const { isOnboarded, setIsOnboarded } = useAppStore()
+  // const router = useRouter()
+
+  if (isOnboarded) {
+    return <Redirect href="/(tabs)" />
+  }
+
+  const handleOnboard = () => {
+    setIsOnboarded(true)
+    router.replace('/(tabs)')
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <ImmersiveOverlay>
@@ -23,7 +29,7 @@ export default function OnboardingScreen() {
             flex: 1,
             padding: 20,
             // borderWidth: 1,
-            borderColor: 'red',
+            // borderColor: 'red',
           }}
         >
           <Text
@@ -54,7 +60,7 @@ export default function OnboardingScreen() {
         >
             Discover, evolve, explore.
           </Text> */}
-          <AnimatedOnboardButton />
+          <AnimatedOnboardButton onPress={handleOnboard} />
         </View>
       </ImmersiveOverlay>
     </SafeAreaView>

@@ -1,5 +1,5 @@
 import { atom } from 'jotai'
 
-const displayImmersiveOverlay = atom(false)
+export const displayImmersiveOverlay = atom(false)
 
-export { displayImmersiveOverlay }
+export const hideTabsAtom = atom(false)

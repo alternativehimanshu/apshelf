@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#101010"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -17,15 +17,42 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/dark-splash-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "softwareKeyboardLayoutMode": "pan"
+      "softwareKeyboardLayoutMode": "pan",
+      "package": "com.poorhimanshu.apshelf"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/images/icon.png"
     },
-    "plugins": ["expo-router", "expo-secure-store"],
-    "scheme": "apshelf"
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-splash-screen",
+        {
+          "ios": {
+            "backgroundColor": "#101010",
+            "image": "./assets/images/splash-icon.png",
+            "resizeMode": "contain"
+          },
+          "android": {
+            "backgroundColor": "#101010",
+            "image": "./assets/images/splash-icon.png",
+            "imageWidth": 150
+          }
+        }
+      ]
+    ],
+    "scheme": "apshelf",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "8540ff54-eb3e-468b-bb4f-cf2f20b85d34"
+      }
+    }
   }
 }

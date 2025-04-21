@@ -6,22 +6,12 @@ import ProfileContainer from '@/components/profile/ProfileContainer'
 import TrayCard, { TrayCardItem } from '@/components/profile/TrayCard'
 import { logger } from '@/config/logger'
 import useAppStore, { FontFamily, Haptic } from '@/store/app'
-
-const hapticOptions: TrayCardItem<Haptic>[] = [
-  { title: '0', value: 0 },
-  { title: '1', value: 1 },
-  { title: '2', value: 2 },
-  { title: '3', value: 3 },
-  { title: '4', value: 4 },
-]
-
-const fontFamilies: TrayCardItem<FontFamily>[] = [
-  { title: 'Geist', value: 'geist' },
-  { title: 'Inter', value: 'inter' },
-  { title: 'Roboto Mono', value: 'roboto-mono' },
-  { title: 'JetBrains Mono', value: 'jetbrains-mono' },
-  { title: 'Montserrat', value: 'montserrat' },
-]
+import { useAtom } from 'jotai'
+import { hideTabsAtom } from '@/store/atoms'
+import { useCallback, useState } from 'react'
+import { THRESHOLD } from '@/constants/misc'
+import { fontFamilies, hapticOptions } from '@/config/setting'
+import { verticalScrollHaptic } from '@/utils/haptic'
 
 export default function ProfileScreen() {
   const { fontFamily: fontFamilyStore, setFontFamily } = useAppStore()
@@ -29,6 +19,24 @@ export default function ProfileScreen() {
   const { colors, setThemeSystem, setThemeUser, theme, preferrence } =
     themeStore()
   const { top } = useSafeAreaInsets()
+  const [hideTabs, setHideTabs] = useAtom(hideTabsAtom)
+  const [scrollY, setScrollY] = useState(0)
+
+  const handleScroll = useCallback(
+    (event: any) => {
+      const currentScrollY = event.nativeEvent.contentOffset.y
+      setScrollY(currentScrollY)
+
+      // Hide tabs when scrolling down, show when scrolling up
+      if (currentScrollY > scrollY && currentScrollY > THRESHOLD) {
+        setHideTabs(true)
+      } else if (currentScrollY < scrollY || currentScrollY < THRESHOLD) {
+        setHideTabs(false)
+      }
+    },
+    [setHideTabs, scrollY]
+  )
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -38,8 +46,11 @@ export default function ProfileScreen() {
         backgroundColor: colors.background,
         paddingTop: top,
         paddingHorizontal: 20,
-        // paddingBottom: 100,
       }}
+      onScroll={handleScroll}
+      scrollEventThrottle={16}
+      onScrollEndDrag={verticalScrollHaptic}
+      onMomentumScrollEnd={verticalScrollHaptic}
     >
       <View style={{ gap: 12 }}>
         <Text
