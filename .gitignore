@@ -3,6 +3,8 @@
 # dependencies
 node_modules/
 
+models/v1/index_v1.json
+models/v2/index_v2.json
 # Expo
 .expo/
 dist/

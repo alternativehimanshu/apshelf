@@ -38,11 +38,12 @@ export default function ProfileScreen() {
   )
 
   return (
-    <View style={{ flex: 1, paddingTop: top }}>
+    <View
+      style={{ flex: 1, paddingTop: top, backgroundColor: colors.background }}
+    >
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          backgroundColor: colors.background,
           paddingHorizontal: 20,
           gap: 12,
         }}

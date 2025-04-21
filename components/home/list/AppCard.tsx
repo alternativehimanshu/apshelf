@@ -1,10 +1,12 @@
 import { Text } from '@/components/ui/Text'
 import { View, Pressable } from 'react-native'
 import { Image } from 'expo-image'
-import { useRouter } from 'expo-router'
+import { useNavigation, useRouter } from 'expo-router'
 import { Colors } from '@/constants/Colors'
 import { themeStore } from '@/store/theme'
-import { App } from '@/lib/api/fdroid'
+import { App } from '@/models/v1'
+import { selectedAppAtom } from '@/store/atoms'
+import { useSetAtom } from 'jotai'
 
 export type AppCardProps = {
   app: App
@@ -13,6 +15,21 @@ export type AppCardProps = {
 export default function AppCard({ app }: AppCardProps) {
   const { colors } = themeStore()
   const router = useRouter()
+  const setSelectedApp = useSetAtom(selectedAppAtom)
+
+  const handlePress = () => {
+    setSelectedApp(app)
+
+    setTimeout(() => {
+      router.push({
+        pathname: '/(app)/[appId]',
+        params: {
+          appId: app.id,
+        },
+      })
+    }, 100)
+  }
+
   return (
     <View
       style={{
@@ -34,7 +51,7 @@ export default function AppCard({ app }: AppCardProps) {
           padding: 10,
           alignItems: 'center',
         }}
-        onPress={() => router.push(`/(app)/${app.id}`)}
+        onPress={handlePress}
       >
         <View
           style={{
@@ -47,12 +64,10 @@ export default function AppCard({ app }: AppCardProps) {
           }}
         >
           <Image
-            source={{ uri: app.image }}
+            source={{ uri: app.icon }}
             style={{
               flex: 1,
-              // margin: -10,
               borderRadius: 20,
-              // backgroundColor: 'white',
               objectFit: 'contain',
             }}
           />
@@ -78,7 +93,7 @@ export default function AppCard({ app }: AppCardProps) {
               fontSize: 12,
             }}
           >
-            {app.description}
+            {app.localized?.['en-US']?.summary}
           </Text>
         </View>
       </Pressable>

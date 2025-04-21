@@ -13,9 +13,9 @@ import { router } from 'expo-router'
 import AppCard from '@/components/home/list/AppCard'
 import { AppCardProps } from '@/components/home/list/AppCard'
 import { verticalScrollHaptic } from '@/utils/haptic'
-import { App } from '@/lib/api/fdroid'
+import { App } from '@/models/v1'
 
-export const apps: App[] = [
+export const apps: any[] = [
   {
     id: 1,
     name: 'Notion',

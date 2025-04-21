@@ -50,9 +50,11 @@ export default function ExploreScreen() {
   }
 
   return (
-    <View style={{ flex: 1, paddingTop: top }}>
+    <View
+      style={{ flex: 1, paddingTop: top, backgroundColor: colors.background }}
+    >
       <ScrollView
-        showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator
         refreshControl={
           <RefreshControl
             tintColor={colors.textSecondary}
@@ -64,12 +66,12 @@ export default function ExploreScreen() {
           />
         }
         contentContainerStyle={{
-          minHeight: '100%',
           backgroundColor: colors.background,
           paddingHorizontal: 20,
         }}
         onScroll={handleScroll}
-        // scrollEventThrottle={16}
+        scrollEventThrottle={16}
+        onScrollEndDrag={verticalScrollHaptic}
         onMomentumScrollEnd={verticalScrollHaptic}
       >
         <View style={{ gap: 12 }}>
@@ -159,7 +161,7 @@ export default function ExploreScreen() {
             {data && Array.isArray(data) ? (
               data.map((app) => (
                 <AppCard
-                  key={app.id}
+                  key={app.packageName}
                   app={app}
                 />
               ))

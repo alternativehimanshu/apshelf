@@ -1,15 +1,7 @@
 import { logger } from "@/config/logger"
-import { FdroidIndex } from "../types/fdroid"
+import { App, FdroidIndexV1, getAppIconUrl, parseIndexV1, getLocalizedString } from "@/models/v1"
+import Index_v1 from "@/models/v1/index_v1.json"
 
-export type App = {
-    id: number
-    name: string
-    image: string
-    description: string
-    downloadLink: string
-    source: 'Fdroid' | 'PlayStore'
-    version: string
-}
 
 // export type ApiResponse<T> = {
 //     data: T
@@ -19,65 +11,74 @@ export type App = {
 //     errorMessage: string
 // }
 
-export const getApp = async (appId: string) => {
-    const response = await fetch(`https://f-droid.org/api/v1/apps/${appId}`)
-    const json = await response.json()
-    if (!json.ok) {
-        throw new Error(`Failed to fetch app data: ${json.error}`)
+export type AppResponse = {
+    id: string
+    name: string
+    image: string
+    description: string
+    source: string
+}
+
+export const getApp = async (packageName: string) => {
+    const apps = await fetchFdroidAppsV1()
+    const app = apps.find((app: App) => app.packageName === packageName)
+    if (!app) {
+        throw new Error(`App not found: ${packageName}`)
     }
 
-    logger.info('json', json)
-
-    const data = {
-        id: json.id,
-        name: json.name,
-        image: json.icon,
-        description: json.summary,
-        downloadLink: json.downloadLink,
-        source: 'Fdroid',
-        version: json.version,
-    } as App
-
-    return data
+    return app
 }
 
 
 export const getApps = async (): Promise<App[]> => {
-    const apps = await fetchFdroidApps()
+    const apps = await fetchFdroidAppsV1()
     return apps
 }
 
 
-export async function fetchFdroidApps() {
-    const res = await fetch('https://f-droid.org/repo/index-v1.json')
-    if (!res.ok) {
-        throw new Error(`Failed to fetch repository data: ${res.status}`);
-    }
-    const json = await res.json()
-
-
-    const apps = json.apps.filter((app: any) => app.localized?.en_US?.name || app.localized?.['en-US']?.name && app.icon)
+export async function fetchFdroidAppsV1() {
 
     // logger.info('apps', apps['za.co.neilson.alarm'])
 
+    const apps: App[] = parseIndexV1(Index_v1 as FdroidIndexV1)
 
-    const data = apps.map((appData: any) => {
+    const withIcon = apps.filter((app) => app.icon && verifyIcon(app.icon))
+
+
+
+    const data = withIcon.map((appData: any) => {
         const lang = appData.localized?.en_US?.name ? 'en_US' : 'en-US'
-        const name = appData.localized?.[lang]?.name
-        const description = appData.localized?.[lang]?.summary
-        const image = appData.icon ? `https://f-droid.org/repo/${appData.packageName}/${lang}/${appData.icon}` : null
+        const name = getLocalizedString(appData, lang, 'name')
+        const summary = getLocalizedString(appData, lang, 'summary')
+        const description = getLocalizedString(appData, lang, 'description')
+        const image = getAppIconUrl(appData, lang)
 
         console.log(image)
         return {
+            ...appData,
             id: appData.packageName,
             name: name,
-            image: image,
-            description: description || '',
+            summary: summary,
+            description: description,
+            icon: image,
             source: 'fdroid',
         };
-    }) as unknown as App[]
+    }) as App[]
 
     // console.log(data)
 
     return data.slice(0, 100)
 }
+
+const verifyIcon = async (iconn: string) => {
+    const url = new URL(iconn)
+    const path = url.pathname
+    const parts = path.split('/')
+    const packageName = parts[1]
+    const locale = parts[2]
+    const icon = parts[3]
+
+    const iconUrl = `https://f-droid.org/repo/${packageName}/${locale}/${icon}`
+    const response = await fetch(iconUrl)
+    return response.ok
+}   
