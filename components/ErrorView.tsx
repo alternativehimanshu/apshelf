@@ -1,12 +1,16 @@
-import { View } from 'react-native'
-import Loading from './Loading'
 import { themeStore } from '@/store/theme'
-import Animated, { Easing, FadeIn, FadeOut } from 'react-native-reanimated'
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated'
+import { FadeIn, FadeOut } from 'react-native-reanimated'
+import { useEffect } from 'react'
+import { Text } from './ui/Text'
 
-export default function LoadingScreen({ loading }: { loading: boolean }) {
+export default function ErrorView({ error }: { error: string }) {
   const { colors } = themeStore()
-
-  if (!loading) return null
 
   return (
     <Animated.View
@@ -21,7 +25,14 @@ export default function LoadingScreen({ loading }: { loading: boolean }) {
         },
       ]}
     >
-      <Loading />
+      <Text
+        style={{
+          fontSize: 14,
+          color: colors.textSecondary,
+        }}
+      >
+        Error: {error}
+      </Text>
     </Animated.View>
   )
 }

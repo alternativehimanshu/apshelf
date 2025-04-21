@@ -3,6 +3,7 @@ const tintColorDark = '#fff';
 
 export const Colors = {
   light: {
+    ripple: '#e0e0e0',
     background: '#f0f0f0',
     text: '#151515',
     textSecondary: '#666666',
@@ -13,6 +14,7 @@ export const Colors = {
     shadow: '#00000055',
   },
   dark: {
+    ripple: '#050505',
     background: '#101010',
     text: '#f0f0f0',
     textSecondary: '#808080',

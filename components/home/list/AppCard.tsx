@@ -1,32 +1,29 @@
 import { Text } from '@/components/ui/Text'
 import { View, Pressable } from 'react-native'
 import { Image } from 'expo-image'
-import { router } from 'expo-router'
+import { useRouter } from 'expo-router'
 import { Colors } from '@/constants/Colors'
 import { themeStore } from '@/store/theme'
+import { App } from '@/lib/api/fdroid'
 
 export type AppCardProps = {
-  app: {
-    id: number
-    name: string
-    image: string
-    description: string
-  }
+  app: App
 }
 
 export default function AppCard({ app }: AppCardProps) {
   const { colors } = themeStore()
+  const router = useRouter()
   return (
     <View
       style={{
         backgroundColor: colors.surface,
-        borderRadius: 32,
+        borderRadius: 48,
         width: '100%',
         overflow: 'hidden',
       }}
     >
       <Pressable
-        android_ripple={{ color: colors.background }}
+        android_ripple={{ color: colors.ripple }}
         style={{
           flexDirection: 'row',
           // padding: 24,
@@ -34,16 +31,17 @@ export default function AppCard({ app }: AppCardProps) {
           flex: 1,
           width: '100%',
           gap: 12,
+          padding: 10,
           alignItems: 'center',
         }}
-        onPress={() => router.push(`/app/${app.id}`)}
+        onPress={() => router.push(`/(app)/${app.id}`)}
       >
         <View
           style={{
-            width: 100,
-            height: 100,
+            width: 92,
+            height: 92,
             borderRadius: 100,
-            padding: 14,
+            padding: 10,
             overflow: 'hidden',
             backgroundColor: 'white',
           }}

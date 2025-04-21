@@ -13,8 +13,9 @@ import { router } from 'expo-router'
 import AppCard from '@/components/home/list/AppCard'
 import { AppCardProps } from '@/components/home/list/AppCard'
 import { verticalScrollHaptic } from '@/utils/haptic'
+import { App } from '@/lib/api/fdroid'
 
-export const apps: AppCardProps['app'][] = [
+export const apps: App[] = [
   {
     id: 1,
     name: 'Notion',
@@ -22,6 +23,9 @@ export const apps: AppCardProps['app'][] = [
       'https://static-00.iconduck.com/assets.00/notion-icon-256x256-g1arps9e.png',
     description:
       'The all-in-one workspace for your notes, tasks, and projects.',
+    downloadLink: 'https://play.google.com/store/apps/details?id=notion.id',
+    source: 'PlayStore',
+    version: '1.0.0',
   },
   {
     id: 2,
@@ -29,6 +33,10 @@ export const apps: AppCardProps['app'][] = [
     image:
       'https://static-00.iconduck.com/assets.00/apps-figma-icon-2048x2048-ctjj5ab7.png',
     description: 'The best way to design and collaborate.',
+    downloadLink:
+      'https://play.google.com/store/apps/details?id=com.figma.mirror',
+    source: 'PlayStore',
+    version: '1.0.0',
   },
   {
     id: 3,
@@ -36,18 +44,30 @@ export const apps: AppCardProps['app'][] = [
     image:
       'https://cdn.pixabay.com/photo/2022/01/30/13/33/github-6980894_960_720.png',
     description: 'Where developers build software.',
+    downloadLink:
+      'https://play.google.com/store/apps/details?id=com.github.android',
+    source: 'PlayStore',
+    version: '1.0.0',
   },
   {
     id: 4,
     name: 'Expo Go',
     image: 'https://www.cdnlogo.com/logos/e/72/expo-go-app.svg',
     description: 'Where developers build software.',
+    downloadLink:
+      'https://play.google.com/store/apps/details?id=host.exp.exponent',
+    source: 'PlayStore',
+    version: '1.0.0',
   },
   {
     id: 5,
     name: 'Google Keep',
     image: 'https://static.cdnlogo.com/logos/g/35/google-keep-icon.svg',
     description: 'Where you can write down your thoughts.',
+    downloadLink:
+      'https://play.google.com/store/apps/details?id=com.google.android.keep',
+    source: 'PlayStore',
+    version: '1.0.0',
   },
 ]
 
@@ -74,91 +94,90 @@ export default function HomeScreen() {
   )
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      style={{ flex: 1 }}
-      contentContainerStyle={{
-        minHeight: '100%',
-        backgroundColor: colors.background,
-        paddingTop: top,
-        paddingHorizontal: 20,
-        paddingBottom: 100,
-      }}
-      onScroll={handleScroll}
-      // scrollEventThrottle={16}
-      onScrollEndDrag={verticalScrollHaptic}
-      onMomentumScrollEnd={verticalScrollHaptic}
-    >
-      <View style={{ flex: 1, gap: 12 }}>
-        <SearchBar />
+    <View style={{ flex: 1, paddingTop: top }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          backgroundColor: colors.background,
+          paddingHorizontal: 20,
+          paddingBottom: 100,
+        }}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        onScrollEndDrag={verticalScrollHaptic}
+        onMomentumScrollEnd={verticalScrollHaptic}
+      >
+        <View style={{ flex: 1, gap: 12 }}>
+          <SearchBar />
 
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingHorizontal: 10,
-            gap: 8,
-          }}
-        >
-          <Text
+          <View
             style={{
-              fontSize: 14,
-              color: colors.textSecondary,
-            }}
-            bold
-          >
-            Explore next adventure
-          </Text>
-
-          <Pressable
-            onPress={() => router.push('/explore')}
-            style={{
-              padding: 10,
-              borderRadius: 50,
-              backgroundColor: colors.surface,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingHorizontal: 10,
+              gap: 8,
             }}
           >
-            <MaterialIcons
-              name="arrow-forward-ios"
-              size={14}
-              color={colors.textSecondary}
-            />
-          </Pressable>
-        </View>
+            <Text
+              style={{
+                fontSize: 14,
+                color: colors.textSecondary,
+              }}
+              bold
+            >
+              Explore next adventure
+            </Text>
 
-        <RecommendCard />
+            <Pressable
+              onPress={() => router.push('/explore')}
+              style={{
+                padding: 10,
+                borderRadius: 50,
+                backgroundColor: colors.surface,
+              }}
+            >
+              <MaterialIcons
+                name="arrow-forward-ios"
+                size={14}
+                color={colors.textSecondary}
+              />
+            </Pressable>
+          </View>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingHorizontal: 10,
-            marginBottom: 12,
-            marginTop: 12,
-          }}
-        >
-          <Text
+          <RecommendCard />
+
+          <View
             style={{
-              fontSize: 14,
-              color: colors.textSecondary,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingHorizontal: 10,
+              marginBottom: 12,
+              marginTop: 12,
             }}
-            bold
           >
-            Suggested Apps
-          </Text>
-        </View>
+            <Text
+              style={{
+                fontSize: 14,
+                color: colors.textSecondary,
+              }}
+              bold
+            >
+              Suggested Apps
+            </Text>
+          </View>
 
-        <View style={{ flexDirection: 'column', gap: 12 }}>
-          {apps.map((app) => (
-            <AppCard
-              key={app.id}
-              app={app}
-            />
-          ))}
+          <View style={{ flexDirection: 'column', gap: 12 }}>
+            {apps.map((app) => (
+              <AppCard
+                key={app.id}
+                app={app}
+              />
+            ))}
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   )
 }

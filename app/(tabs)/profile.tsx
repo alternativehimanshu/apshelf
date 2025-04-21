@@ -38,21 +38,18 @@ export default function ProfileScreen() {
   )
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      style={{ flex: 1 }}
-      contentContainerStyle={{
-        minHeight: '100%',
-        backgroundColor: colors.background,
-        paddingTop: top,
-        paddingHorizontal: 20,
-      }}
-      onScroll={handleScroll}
-      scrollEventThrottle={16}
-      onScrollEndDrag={verticalScrollHaptic}
-      onMomentumScrollEnd={verticalScrollHaptic}
-    >
-      <View style={{ gap: 12 }}>
+    <View style={{ flex: 1, paddingTop: top }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          backgroundColor: colors.background,
+          paddingHorizontal: 20,
+          gap: 12,
+        }}
+        onScroll={handleScroll}
+        onScrollEndDrag={verticalScrollHaptic}
+        onMomentumScrollEnd={verticalScrollHaptic}
+      >
         <Text
           style={{
             fontSize: 24,
@@ -119,7 +116,7 @@ export default function ProfileScreen() {
           }}
           selected={hapticStore * 25}
         />
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   )
 }

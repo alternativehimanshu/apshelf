@@ -9,6 +9,7 @@ import useAppStore from '@/store/app'
 import LoadingScreen from '@/components/LoadingScreen'
 import { View } from 'react-native'
 import * as SplashScreen from 'expo-splash-screen'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
@@ -18,6 +19,8 @@ SplashScreen.setOptions({
   duration: 500,
   fade: true,
 })
+
+const queryClient = new QueryClient()
 
 function RootLayoutNav() {
   const { colors, setThemeSystem, theme } = themeStore()
@@ -54,34 +57,36 @@ function RootLayoutNav() {
   }, [])
 
   if (!fontsLoaded || !isReady) {
-    return <LoadingScreen />
+    return <LoadingScreen loading={!isReady} />
   }
 
   return (
     <ThemeProvider>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: colors.background,
-        }}
-      >
-        <GestureHandlerRootView
+      <QueryClientProvider client={queryClient}>
+        <View
           style={{
             flex: 1,
+            backgroundColor: colors.background,
           }}
         >
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              statusBarStyle: isDark ? 'light' : 'dark',
-              statusBarBackgroundColor: colors.background,
+          <GestureHandlerRootView
+            style={{
+              flex: 1,
             }}
           >
-            <Stack.Screen name="index" />
-            <Stack.Screen name="(tabs)" />
-          </Stack>
-        </GestureHandlerRootView>
-      </View>
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                statusBarStyle: isDark ? 'light' : 'dark',
+                statusBarBackgroundColor: colors.background,
+              }}
+            >
+              <Stack.Screen name="index" />
+              <Stack.Screen name="(tabs)" />
+            </Stack>
+          </GestureHandlerRootView>
+        </View>
+      </QueryClientProvider>
     </ThemeProvider>
   )
 }
